@@ -1,0 +1,68 @@
+forward_to_gmail reads an email from stdin and inserts it into a
+user's Gmail account using the Gmail API with narrowly-scoped OAuth2
+credentials.  You can feed incoming emails to forward_to_gmail using
+procmail or .forward to "forward" the messages to Gmail without using
+SMTP.  (SMTP mail forwarding is broken because it causes backscatter
+and negatively affects the reputation of the forwarding IP address.)
+
+
+ENVIRONMENT VARIABLES
+
+The following environment variables must be set to use forward_to_gmail:
+
+	$GMAIL_CLIENT_ID	Your OAuth2 client ID
+	$GMAIL_CLIENT_SECRET	Your OAuth2 client secret
+	$GMAIL_TOKEN		Your OAuth2 token
+
+To obtain a client ID and client secret, follow the steps under "Obtaining
+Client Credentials" below.  These credentials only need to be obtained
+once and can be shared among all users of an organization.
+
+To obtain a token, follow the steps under "Obtaining a Token" below.
+This token is tied to a particular Gmail account and only needs to
+be obtained once as long as the user does not revoke it.
+
+
+
+OBTAINING CLIENT CREDENTIALS
+
+1. Go to:
+
+	https://console.developers.google.com/start/api?id=gmail&credential=client_key
+
+2. Create a new project or select an existing project and click "Continue"
+
+3. On the "Add credentials to your project" page:
+
+	1. Select:
+		Which API are you using? => "Gmail API"
+		Where will you be calling the API from? => "Other UI (e.g. Windows, CLI tool)"
+		What data will you be accessing? => "User data"
+
+	2. Click "What Credentials Do I Need?"
+
+	3. Enter a client ID name of your choosing and click "Create client ID"
+
+	4. Customize the consent screen as you like and click "Continue"
+
+	5. Click "Done"
+
+4. Click the name of your client ID.  Make note of your client ID and
+client secret, which should be assigned to the $GMAIL_CLIENT_ID and
+$GMAIL_CLIENT_SECRET variables, respectively.
+
+
+OBTAINING A TOKEN
+
+First you must obtain client credentials and set the $GMAIL_CLIENT_ID
+and $GMAIL_CLIENT_SECRET environment variables.
+
+1. Run `forward_to_gmail -get_url` and go to the URL that it outputs.
+
+2. Log in with your Google account and authorize forward_to_gmail.
+
+3. Run `forward_to_gmail -get_token CODE`, replacing CODE with the code
+provided by Gmail.
+
+4. Make note of the token output by `forward_to_gmail`.  It should be
+assigned to the $GMAIL_TOKEN environment variable.

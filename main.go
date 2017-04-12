@@ -57,10 +57,6 @@ func isSuccessful(statusCode int) bool {
 	return statusCode >= 200 && statusCode <= 299
 }
 
-func isTemporaryError(statusCode int) bool {
-	return (statusCode >= 500 && statusCode <= 500) || statusCode == 429 || statusCode == 403
-}
-
 func makeConfig() *oauth2.Config {
 	conf := &oauth2.Config{
 		ClientID:     os.Getenv("GMAIL_CLIENT_ID"),
@@ -162,12 +158,7 @@ func main() {
 			response.Body.Close()
 
 			fmt.Fprintf(os.Stderr, "forward_to_gmail: HTTP error %s from Gmail API: %s\n", response.StatusCode, responseBody.String())
-
-			if isTemporaryError(response.StatusCode) {
-				os.Exit(EX_TEMPFAIL)
-			} else {
-				os.Exit(EX_SOFTWARE)
-			}
+			os.Exit(EX_TEMPFAIL)
 		}
 	}
 }

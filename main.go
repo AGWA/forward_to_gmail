@@ -157,7 +157,7 @@ func main() {
 			io.Copy(&responseBody, response.Body)
 			response.Body.Close()
 
-			fmt.Fprintf(os.Stderr, "forward_to_gmail: HTTP error %s from Gmail API: %s\n", response.StatusCode, responseBody.String())
+			fmt.Fprintf(os.Stderr, "forward_to_gmail: HTTP error %d from Gmail API: %s\n", response.StatusCode, responseBody.String())
 			os.Exit(EX_TEMPFAIL)
 		}
 	}
